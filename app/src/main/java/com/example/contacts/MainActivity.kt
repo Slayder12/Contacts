@@ -14,13 +14,16 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.contacts.models.Person
-import com.example.contacts.models.PersonViewModel
+import com.example.contacts.models.ContactViewModel
+import com.example.contacts.utils.ContactAdapter
+import java.text.SimpleDateFormat
+import java.util.Date
+import java.util.TimeZone
 
 
+class MainActivity : AppCompatActivity(), ContactAdapter.PersonClickListener {
 
-class MainActivity : AppCompatActivity(), PersonAdapter.PersonClickListener {
-
-    private lateinit var personViewModel: PersonViewModel
+    private lateinit var contactViewModel: ContactViewModel
 
     private lateinit var toolbar: Toolbar
     private lateinit var firstNameET: EditText
@@ -37,36 +40,18 @@ class MainActivity : AppCompatActivity(), PersonAdapter.PersonClickListener {
         init()
 
         recyclerViewRV.layoutManager = LinearLayoutManager(this)
-        val adapter = PersonAdapter(this, this)
+        val adapter = ContactAdapter(this, this)
         recyclerViewRV.adapter = adapter
 
-        personViewModel = ViewModelProvider(this, ViewModelProvider.AndroidViewModelFactory
-            .getInstance(application)
-        )[PersonViewModel::class.java]
-        personViewModel.personList.observe(this) { list ->
+        contactViewModel = ViewModelProvider(
+            this, ViewModelProvider.AndroidViewModelFactory
+                .getInstance(application)
+        )[ContactViewModel::class.java]
+        contactViewModel.personList.observe(this) { list ->
             list?.let {
                 adapter.updateList(it)
             }
         }
-    }
-
-    override fun onResume() {
-        super.onResume()
-        saveBTN.setOnClickListener{
-            val firstName = firstNameET.text.toString()
-            val lastName = lastNameET.text.toString()
-            val phoneNumber = phoneNumberET.text.toString()
-            val person = Person(firstName, lastName, phoneNumber)
-
-            if(Person.isValidate(this, person)){
-                personViewModel.insertPerson(person)
-                Toast.makeText(this, "${person.firstName} Добавлен", Toast.LENGTH_SHORT).show()
-            }else{
-                return@setOnClickListener
-            }
-            clearEditText()
-        }
-
     }
 
     private fun clearEditText() {
@@ -88,7 +73,7 @@ class MainActivity : AppCompatActivity(), PersonAdapter.PersonClickListener {
         saveBTN = findViewById(R.id.saveBTN)
         recyclerViewRV = findViewById(R.id.recyclerViewRV)
 
-        personViewModel = ViewModelProvider(this)[PersonViewModel::class.java]
+        contactViewModel = ViewModelProvider(this)[ContactViewModel::class.java]
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
@@ -105,20 +90,30 @@ class MainActivity : AppCompatActivity(), PersonAdapter.PersonClickListener {
     }
 
     override fun onItemClicked(person: Person) {
-        personViewModel.deletePerson(person)
+        contactViewModel.deletePerson(person)
         Toast.makeText(this, "${person.firstName} удалён", Toast.LENGTH_SHORT).show()
     }
+
+    @SuppressLint("SimpleDateFormat")
+    private fun formatMillisecond(date: Long): String {
+        val timeFormat = SimpleDateFormat("EEE, HH:mm")
+        timeFormat.timeZone = TimeZone.getTimeZone("GMT+10")
+        return timeFormat.format(Date(date))
+    }
+
     fun saveData(view: View){
         val firstName = firstNameET.text.toString()
         val lastName = lastNameET.text.toString()
         val phoneNumber = phoneNumberET.text.toString()
-        val person = Person(firstName, lastName, phoneNumber)
+        val date = formatMillisecond(Date().time)
+        val person = Person(firstName, lastName, phoneNumber, date)
 
-        if(Person.isValidate(this, person)){
-            personViewModel.insertPerson(person)
+        if (Person.isValidate(this, person)) {
+            contactViewModel.insertPerson(person)
             Toast.makeText(this, "${person.firstName} Добавлен", Toast.LENGTH_SHORT).show()
+            clearEditText()
         }
-        clearEditText()
 
     }
+
 }

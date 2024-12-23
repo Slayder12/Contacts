@@ -4,18 +4,19 @@ import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.viewModelScope
-import com.example.contacts.PersonRepository
+import com.example.contacts.repository.ContactRepository
+import com.example.contacts.utils.ContactsDataBase
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
-class PersonViewModel(application: Application): AndroidViewModel(application) {
+class ContactViewModel(application: Application): AndroidViewModel(application) {
 
-    private val repository: PersonRepository
+    private val repository: ContactRepository
     val personList: LiveData<List<Person>>
 
     init {
         val dao = ContactsDataBase.getDatabase(application).getPersonDao()
-        repository = PersonRepository(dao)
+        repository = ContactRepository(dao)
         personList = repository.personList
     }
 

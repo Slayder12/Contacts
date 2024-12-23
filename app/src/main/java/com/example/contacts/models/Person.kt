@@ -10,7 +10,8 @@ import androidx.room.PrimaryKey
 data class Person (
     @ColumnInfo(name = "firstName") var firstName: String,
     @ColumnInfo(name = "lastName") var lastName: String,
-    @ColumnInfo(name = "phoneNumber") val phoneNumber: String,
+    @ColumnInfo(name = "date") var date: String,
+    @ColumnInfo(name = "phoneNumber") var phoneNumber: String,
 ) {
     @PrimaryKey(autoGenerate = true)
     var id = 0

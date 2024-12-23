@@ -1,10 +1,10 @@
-package com.example.contacts
+package com.example.contacts.repository
 
 import androidx.lifecycle.LiveData
 import com.example.contacts.models.Person
-import com.example.contacts.models.PersonDataAccessObject
+import com.example.contacts.utils.PersonDataAccessObject
 
-class PersonRepository(private val personDao: PersonDataAccessObject) {
+class ContactRepository(private val personDao: PersonDataAccessObject) {
     val personList: LiveData<List<Person>> = personDao.getAllPersons()
 
     suspend fun insert(person: Person){

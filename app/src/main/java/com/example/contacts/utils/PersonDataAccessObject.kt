@@ -1,4 +1,4 @@
-package com.example.contacts.models
+package com.example.contacts.utils
 
 import androidx.lifecycle.LiveData
 import androidx.room.Dao
@@ -6,6 +6,7 @@ import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.Query
 import androidx.room.Update
+import com.example.contacts.models.Person
 
 @Dao
 interface PersonDataAccessObject {

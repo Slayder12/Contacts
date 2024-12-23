@@ -1,9 +1,10 @@
-package com.example.contacts.models
+package com.example.contacts.utils
 
 import android.content.Context
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
+import com.example.contacts.models.Person
 
 @Database(entities = [Person::class], version = 1, exportSchema = false)
 abstract class ContactsDataBase : RoomDatabase() {

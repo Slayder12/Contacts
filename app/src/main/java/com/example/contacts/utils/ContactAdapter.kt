@@ -1,4 +1,4 @@
-package com.example.contacts
+package com.example.contacts.utils
 
 import android.annotation.SuppressLint
 import android.content.Context
@@ -8,9 +8,10 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
+import com.example.contacts.R
 import com.example.contacts.models.Person
 
-class PersonAdapter(private val context: Context, private val listener: PersonClickListener): RecyclerView.Adapter<PersonAdapter.PersonViewHolder>() {
+class ContactAdapter(private val context: Context, private val listener: PersonClickListener): RecyclerView.Adapter<ContactAdapter.PersonViewHolder>() {
 
     private val personList = ArrayList<Person>()
 
@@ -26,18 +27,20 @@ class PersonAdapter(private val context: Context, private val listener: PersonCl
             private val itemFirstNameTV: TextView = itemView.findViewById(R.id.itemFirstNameTV)
             private val itemLastNameTV: TextView = itemView.findViewById(R.id.itemLastNameTV)
             private val itemNumberTV: TextView = itemView.findViewById(R.id.itemNumberTV)
+            private val itemDateTV: TextView = itemView.findViewById(R.id.itemDateTV)
             val itemIconDeleteIV: ImageView = itemView.findViewById(R.id.itemIconDeleteIV)
 
             fun bind(person: Person){
                 itemFirstNameTV.text = person.firstName
                 itemLastNameTV.text = person.lastName
                 itemNumberTV.text = person.phoneNumber
+                itemDateTV.text = person.date
             }
         }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PersonViewHolder {
         val viewHolder
-            = PersonViewHolder(LayoutInflater.from(context).inflate(R.layout.person_list, parent,false))
+            = PersonViewHolder(LayoutInflater.from(context).inflate(R.layout.list_item, parent,false))
         viewHolder.itemIconDeleteIV.setOnClickListener{
             listener.onItemClicked(personList[viewHolder.adapterPosition])
         }
